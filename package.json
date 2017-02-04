@@ -1,0 +1,27 @@
+{
+  "name": "@sunny-g/cycle-redux-driver",
+  "version": "0.0.1",
+  "description": "Unofficial Cycle.js driver for Redux",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cycle",
+    "redux",
+    "rx",
+    "rxjs"
+  ],
+  "author": "Sunny G <sunny.gonna@gmail.com> (http://blog.sunnyg.io)",
+  "license": "ISC",
+  "dependencies": {
+    "redux": "^3.6.0",
+    "rx": "^4.1.0"
+  },
+  "devDependencies": {
+    "flow-bin": "^0.38.0"
+  },
+  "directories": {
+    "test": "test"
+  }
+}
