@@ -15,7 +15,8 @@ export type ActionMemoryStream = MemoryStream<Action>;
 export type ActionSinkStream = Stream<{ [type: string]: ActionStream }>;
 
 export interface ActionSource {
-  select(type: string): ActionMemoryStream | any;
+  select(type?: string): ActionMemoryStream | any;
+  selectAll(): ActionMemoryStream | any;
   // isolateSource(source: ReduxActionSource, scope: string): ReduxActionSource;
   // isolateSink(sink: Stream<RequestInput>, scope: string): Stream<RequestInput>;
 }
