@@ -2,7 +2,7 @@ import { FSA } from 'flux-standard-action';
 import { Stream, MemoryStream } from 'xstream';
 
 export interface ActionMeta {
-  scope: string;
+  scope?: string;
   [key: string]: any;
 }
 
