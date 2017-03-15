@@ -12,13 +12,17 @@ export type ActionStream = Stream<Action>;
 
 export type ActionMemoryStream = MemoryStream<Action>;
 
-export type ActionSinkStream = Stream<{ [type: string]: ActionStream }>;
+export interface ActionSinkCollection {
+  [type: string]: ActionStream | any;
+}
+
+export type ActionSinkStream = Stream<ActionSinkCollection>;
 
 export interface ActionSource {
-  select(type?: string): ActionMemoryStream | any;
-  selectAll(): ActionMemoryStream | any;
-  // isolateSource(source: ReduxActionSource, scope: string): ReduxActionSource;
-  // isolateSink(sink: Stream<RequestInput>, scope: string): Stream<RequestInput>;
+  select(
+    type?: string,
+    _transform?: (action$s: ActionSinkCollection) => ActionStream,
+  ): ActionMemoryStream | any;
 }
 
 export interface StateSource {

@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
+    "build:watch": "npm run build -- --watch",
     "prepublish": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack --watch"
   },
   "keywords": [
     "cycle",

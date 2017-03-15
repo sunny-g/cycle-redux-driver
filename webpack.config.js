@@ -1,9 +1,22 @@
+const babelLoader = {
+  loader: 'babel-loader',
+  options: {
+    presets: [
+      [ 'es2015', { modules: false } ],
+      'stage-0',
+    ],
+  },
+};
+const tsLoader = {
+  loader: 'ts-loader',
+};
+
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.ts',
 
   output: {
     path: './dist',
-    filename: 'cycle-redux-driver.js',
+    filename: 'index.js',
   },
 
   resolve: {
@@ -16,32 +29,14 @@ module.exports = {
       test: /\.ts/,
       exclude: /node_modules/,
       use: [
-        {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              [ 'es2015', { modules: false } ],
-              'stage-0',
-            ],
-          },
-        },
-        {
-          loader: 'ts-loader',
-        },
+        babelLoader,
+        tsLoader,
       ],
     }, {
       test: /\.js/,
       exclude: /node_modules/,
       use: [
-        {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              [ 'es2015', { modules: false } ],
-              'stage-0',
-            ],
-          },
-        },
+        babelLoader,
       ],
     }],
   },
