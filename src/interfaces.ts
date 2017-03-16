@@ -26,7 +26,7 @@ export interface ActionSource {
 }
 
 export interface StateSource {
-  getState$(): MemoryStream<any> | any;
+  select(): MemoryStream<any> | any;
 }
 
 export interface ReduxSource {

@@ -25,7 +25,7 @@ export default class MakeStateSource implements StateSource {
     this._state$ = adapt(state$.compose(dropRepeats()));
   }
 
-  getState$() {
+  select() {
     return this._state$;
   }
 }
