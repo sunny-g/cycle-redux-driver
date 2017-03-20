@@ -3,7 +3,7 @@ import makeReduxDriver from "./redux-driver";
 export default makeReduxDriver;
 export {
   Action,
-  ActionSinkStream,
+  ActionSink,
   ActionSource,
   StateSource,
   ReduxSource,

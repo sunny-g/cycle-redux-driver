@@ -1,8 +1,10 @@
 import { FSA } from 'flux-standard-action';
 import { Stream, MemoryStream } from 'xstream';
 
+export type StateStream = MemoryStream<any>;
+
 export interface ActionMeta {
-  scope?: string;
+  $$CYCLE_ACTION_SCOPE: Set<string>;
   [key: string]: any;
 }
 
@@ -10,23 +12,21 @@ export type Action = FSA<any, ActionMeta>;
 
 export type ActionStream = Stream<Action>;
 
-export type ActionMemoryStream = MemoryStream<Action>;
-
 export interface ActionSinkCollection {
   [type: string]: ActionStream | any;
 }
 
-export type ActionSinkStream = Stream<ActionSinkCollection>;
+export type ActionSink = Stream<ActionSinkCollection>;
 
 export interface ActionSource {
   select(
     type?: string,
-    _transform?: (action$s: ActionSinkCollection) => ActionStream,
-  ): ActionMemoryStream | any;
+    transform?: (action$s: ActionSinkCollection) => ActionStream,
+  ): ActionStream | any;
 }
 
 export interface StateSource {
-  select(): MemoryStream<any> | any;
+  select(): StateStream | any;
 }
 
 export interface ReduxSource {

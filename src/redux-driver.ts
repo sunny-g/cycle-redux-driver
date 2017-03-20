@@ -4,7 +4,7 @@ import { Middleware, Reducer, Store } from 'redux';
 import MainActionSource from './MainActionSource';
 import MainStateSource from './MainStateSource';
 import {
-  ActionSinkStream,
+  ActionSink,
   ActionSource,
   ReduxSource,
   StateSource
@@ -15,24 +15,20 @@ export default function makeReduxDriver (
   initialState: any,
   actionsForStore: string[],
   ...middlewares: Middleware[],
-): Driver<ActionSinkStream, ReduxSource> {
-  function reduxDriver(action$$: ActionSinkStream): ReduxSource {
+): Driver<ActionSink, ReduxSource> {
+  return function reduxDriver(action$$: ActionSink): ReduxSource {
     const store: Store<any> = createStore(
       reducer,
       initialState,
       applyMiddleware(...middlewares),
     );
 
-    const actionSource: ActionSource = new MainActionSource(action$$, actionsForStore, store);
+    const actionSource: ActionSource = new MainActionSource(action$$, store, actionsForStore);
     const stateSource: StateSource = new MainStateSource(store);
 
     return {
       actions: actionSource,
-      state: stateSource.getState$(),
-      // isolateSource
-      // isolateSink
+      state: stateSource,
     };
-  }
-
-  return reduxDriver;
+  };
 };

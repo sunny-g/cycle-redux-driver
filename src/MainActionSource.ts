@@ -3,61 +3,70 @@ import prop from 'ramda/src/prop';
 import values from 'ramda/src/values';
 import { Store } from 'redux';
 import xs from 'xstream';
+import { isolateActionSource, isolateActionSink } from './isolate';
 import {
   ActionSinkCollection,
-  ActionSinkStream,
+  ActionSink,
   ActionSource,
-  ActionMemoryStream,
-  ActionStream
+  ActionStream,
 } from './interfaces';
 
 export default class MainActionSource implements ActionSource {
-  private _action$$: ActionSinkStream;
-  private _actionsForStore: string[];
-  private _store: Store<any>;
+  public action$$: ActionSink;
   private _actionStreams: ActionSinkCollection;
 
-  constructor(action$$: ActionSinkStream, actionsForStore: string[], store: Store<any>) {
-    this._action$$ = action$$;
-    this._actionsForStore = actionsForStore;
-    this._store = store;
+  constructor(action$$: ActionSink, _store?: Store<any>, _actionsForStore?: string[]) {
+    this.action$$ = action$$;
 
-    this.dispatchActionsToStore(this._actionsForStore);
+    const actionsForStore = _actionsForStore || [];
+    const store = _store || null;
+
+    if (store !== null && actionsForStore.length > 0) {
+      this.dispatchActionsToStore(actionsForStore, store);
+    }
   }
 
-  public select(type, _transform) {
+  public select(type, transform) {
     if (type === undefined) {
-      return this.select('*', action$s => xs.merge(...values(action$s)));
+      return this._select('*', action$s => xs.merge(...values(action$s)));
     }
 
-    const transform = _transform ? _transform : prop(type);
+    return this._select(type, typeof transform === 'function' ? transform : prop(type));
+  }
 
+  public isolateSource = isolateActionSource;
+  public isolateSink = isolateActionSink;
+
+  private createActionStream(
+    transform: (action$s: ActionSinkCollection) => ActionStream,
+  ): ActionStream {
+      // TODO: should this be compose, so that we can update the saved stream if necessary?
+    return this.action$$
+      .map(transform)
+      .flatten();
+  }
+
+  private dispatchActionsToStore(actionsForStore: string[], store: Store<any>): void {
+    actionsForStore.forEach(type => {
+      const action$: ActionStream = this
+        .createActionStream(prop(type))
+        .debug(action => store.dispatch(action));
+
+      this._actionStreams[type] = adapt(action$);
+
+      // add listener to start funneling actions into store
+      action$.addListener({ next() {}, error() {}, complete() {} });
+    });
+  }
+
+  private _select(type, transform) {
     if (!this._actionStreams.hasOwnProperty(type)) {
-      const action$: ActionMemoryStream = this
-        .createActionMemoryStream(transform);
+      const action$: ActionStream = this
+        .createActionStream(transform);
 
       this._actionStreams[type] = adapt(action$);
     }
 
     return this._actionStreams[type];
-  }
-
-  private createActionMemoryStream(
-    transform: (action$s: ActionSinkCollection) => ActionStream,
-  ): ActionMemoryStream {
-    return this._action$$
-      .map(transform)
-      .flatten()
-      .remember();
-  }
-
-  private dispatchActionsToStore(actionsForStore: string[]): void {
-    actionsForStore.forEach(type => {
-      const action$ = this
-        .createActionMemoryStream(prop(type))
-        .debug(action => this._store.dispatch(action));
-
-      this._actionStreams[type] = adapt(action$);
-    });
   }
 }
