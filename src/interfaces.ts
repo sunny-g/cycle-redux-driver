@@ -23,6 +23,8 @@ export interface ActionSource {
     type?: string,
     transform?: (action$s: ActionSinkCollection) => ActionStream,
   ): ActionStream | any;
+  isolateSource(source: ActionSource, scope: string | null): ActionSource;
+  isolateSink(sink: ActionSink, scope: string | null): ActionSink;
 }
 
 export interface StateSource {
