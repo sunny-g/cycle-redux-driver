@@ -13,8 +13,8 @@ export function isolateActionSource(actionSource, scope) {
     .filter(action => {
       return action.hasOwnProperty('meta') &&
         action.meta.hasOwnProperty(ACTION_SCOPE_KEY) &&
-        action.meta[ACTION_SCOPE_KEY] instanceof Set &&
-        action.meta[ACTION_SCOPE_KEY].has(scope);
+        Array.isArray(action.meta[ACTION_SCOPE_KEY]) &&
+        action.meta[ACTION_SCOPE_KEY].includes(scope);
     });
 
   return newSource;
@@ -31,11 +31,11 @@ export function isolateActionSink(actionSink, scope) {
         meta = { ...action.meta };
       }
 
-      if (!action.meta.hasOwnProperty(ACTION_SCOPE_KEY)) {
-        meta[ACTION_SCOPE_KEY] = new Set();
+      if (!action.meta.hasOwnProperty(ACTION_SCOPE_KEY) || !Array.isArray(action.meta[ACTION_SCOPE_KEY])) {
+        meta[ACTION_SCOPE_KEY] = [];
       }
 
-      meta[ACTION_SCOPE_KEY].add(scope);
+      meta[ACTION_SCOPE_KEY].push(scope);
 
       return { ...action, meta };
     })));
