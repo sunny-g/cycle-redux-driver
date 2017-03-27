@@ -1,5 +1,5 @@
-import map from 'ramda/src/map';
 import { Action } from './interfaces';
+import { mapObj } from './util';
 import MainActionSource from "./MainActionSource";
 
 const ACTION_SCOPE_KEY = '$$CYCLE_ACTION_SCOPE';
@@ -24,7 +24,7 @@ export function isolateActionSink(actionSink, scope) {
   if (scope === null) { return actionSink; }
 
   return actionSink
-    .map(map(action$ => action$.map((action: Action) => {
+    .map(mapObj(action$ => action$.map((action: Action) => {
       let meta = {};
 
       if (action.meta) {

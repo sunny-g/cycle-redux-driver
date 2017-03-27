@@ -10,7 +10,7 @@ export default class MakeStateSource implements StateSource {
   constructor(store: Store<any>) {
     let unsubscribe = () => {};
     const state$: MemoryStream<any> = xs
-      .createWithMemory({
+      .create({
         start: listener => {
           listener.next(store.getState());
 
@@ -20,9 +20,11 @@ export default class MakeStateSource implements StateSource {
         },
 
         stop: () => unsubscribe(),
-      });
+      })
+      .compose(dropRepeats())
+      .remember();
 
-    this._state$ = adapt(state$.compose(dropRepeats()));
+    this._state$ = adapt(state$);
   }
 
   select() {

@@ -1,6 +1,4 @@
 import { adapt } from '@cycle/run/lib/adapt';
-import prop from 'ramda/src/prop';
-import values from 'ramda/src/values';
 import { Store } from 'redux';
 import xs from 'xstream';
 import { isolateActionSource, isolateActionSink } from './isolate';
@@ -28,13 +26,19 @@ export default class MainActionSource implements ActionSource {
 
   public select(type, transform) {
     let action$: ActionStream;
+
     if (type === undefined) {
-      action$ = this.getOrCreateActionStream('*', (action$s: ActionSinkCollection) => {
-        const actionStreams: Array<ActionStream> = values(action$s);
-        return xs.merge(...actionStreams);
-      });
+      action$ = this.getOrCreateActionStream(
+        '*',
+        (action$s: ActionSinkCollection) => {
+          const actionStreams: Array<ActionStream> = Object
+            .keys(action$s)
+            .map(actionType => action$s[actionType]);
+          return xs.merge(...actionStreams);
+        },
+      );
     } else {
-      action$ = this.getOrCreateActionStream(type, typeof transform === 'function' ? transform : prop(type));
+      action$ = this.getOrCreateActionStream(type, transform);
     }
 
     return adapt(action$);
@@ -46,7 +50,7 @@ export default class MainActionSource implements ActionSource {
   private dispatchActionsToStore(actionsForStore: string[], store: Store<any>): void {
     actionsForStore.forEach(type => {
       const action$: ActionStream = this
-        .getOrCreateActionStream(type, prop(type))
+        .getOrCreateActionStream(type)
         .debug(action => store.dispatch(action));
 
       // add listener to start funneling actions into store
@@ -56,13 +60,16 @@ export default class MainActionSource implements ActionSource {
 
   private getOrCreateActionStream(
     type: string,
-    transform: (action$s: ActionSinkCollection) => ActionStream,
+    transform?: (action$s: ActionSinkCollection) => ActionStream,
   ): ActionStream {
     // TODO: should this be compose, so that we can update the saved stream if necessary?
     if (!this._actionStreams.hasOwnProperty(type)) {
       this._actionStreams[type] = this
         .action$$
-        .map(transform)
+        .map((typeof transform === 'function') ?
+          transform :
+          action$s => action$s[type]
+        )
         .flatten();
     }
 
