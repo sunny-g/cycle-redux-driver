@@ -23,8 +23,14 @@ export default function makeReduxDriver (
       applyMiddleware(...(middlewares || [])),
     );
 
-    const actionSource: ActionSource = new MainActionSource(action$$, store, actionsForStore);
     const stateSource: StateSource = new MainStateSource(store);
+    const actionSource: ActionSource = new MainActionSource(
+      action$$,
+      store,
+      actionsForStore
+    );
+
+    action$$.addListener({ next() {}, error() {}, complete() {} });
 
     return {
       actions: actionSource,

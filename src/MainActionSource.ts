@@ -1,6 +1,7 @@
 import { adapt } from '@cycle/run/lib/adapt';
 import { Store } from 'redux';
 import xs from 'xstream';
+import dropRepeats from 'xstream/extra/dropRepeats';
 import { isolateActionSource, isolateActionSink } from './isolate';
 import {
   ActionSinkCollection,
@@ -11,15 +12,19 @@ import {
 
 export default class MainActionSource implements ActionSource {
   public action$$: ActionSink;
-  private _actionStreams: ActionSinkCollection;
+  private _actionStreams: ActionSinkCollection = {};
 
-  constructor(action$$: ActionSink, _store?: Store<any>, _actionsForStore?: string[]) {
+  constructor(
+    action$$: ActionSink,
+    _store?: Store<any>,
+    _actionsForStore?: string[]
+  ) {
     this.action$$ = action$$;
 
     const actionsForStore = _actionsForStore || [];
     const store = _store || null;
 
-    if (store !== null && actionsForStore.length > 0) {
+    if (store && actionsForStore && actionsForStore.length > 0) {
       this.dispatchActionsToStore(actionsForStore, store);
     }
   }
@@ -49,12 +54,10 @@ export default class MainActionSource implements ActionSource {
 
   private dispatchActionsToStore(actionsForStore: string[], store: Store<any>): void {
     actionsForStore.forEach(type => {
-      const action$: ActionStream = this
+      this
         .getOrCreateActionStream(type)
-        .debug(action => store.dispatch(action));
-
-      // add listener to start funneling actions into store
-      action$.addListener({ next() {}, error() {}, complete() {} });
+        .debug(action => store.dispatch(action))
+        .addListener({ next() {}, error() {}, complete() {} });
     });
   }
 
@@ -64,8 +67,7 @@ export default class MainActionSource implements ActionSource {
   ): ActionStream {
     // TODO: should this be compose, so that we can update the saved stream if necessary?
     if (!this._actionStreams.hasOwnProperty(type)) {
-      this._actionStreams[type] = this
-        .action$$
+      this._actionStreams[type] = this.action$$
         .map((typeof transform === 'function') ?
           transform :
           action$s => action$s[type]

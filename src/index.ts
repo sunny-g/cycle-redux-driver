@@ -1,6 +1,5 @@
 import makeReduxDriver from "./redux-driver";
 
-export default makeReduxDriver;
 export {
   Action,
   ActionSink,
@@ -8,3 +7,10 @@ export {
   StateSource,
   ReduxSource,
 } from './interfaces';
+
+export {
+  createReducer,
+  makeActionCreator,
+} from './util';
+
+export default makeReduxDriver;
