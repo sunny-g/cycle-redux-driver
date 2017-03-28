@@ -20,7 +20,7 @@ export default function makeReduxDriver (
     const store: Store<any> = createStore(
       reducer,
       initialState,
-      applyMiddleware(...middlewares),
+      applyMiddleware(...(middlewares || [])),
     );
 
     const actionSource: ActionSource = new MainActionSource(action$$, store, actionsForStore);
