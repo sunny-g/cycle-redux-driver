@@ -1,13 +1,20 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "es2015",
+    "moduleResolution": "node",
     "target": "es6",
 
     "allowJs": false,
+    "allowSyntheticDefaultImports": true,
     "alwaysStrict": true,
     "listEmittedFiles": true,
     "listFiles": true,
     "sourceMap": true
-  }
+  },
+
+  "exclude": [
+    "node_modules",
+    "example"
+  ]
 }
