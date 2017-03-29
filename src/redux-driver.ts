@@ -3,6 +3,7 @@ import { applyMiddleware, createStore } from 'redux';
 import { Middleware, Reducer, Store } from 'redux';
 import MainActionSource from './MainActionSource';
 import MainStateSource from './MainStateSource';
+import { isolateActionSource, isolateActionSink } from './isolate';
 import {
   ActionSink,
   ActionSource,
@@ -32,9 +33,19 @@ export default function makeReduxDriver (
 
     action$$.addListener({ next() {}, error() {}, complete() {} });
 
+    const isolateSink = isolateActionSink;
+    const isolateSource = (source, scope) => ({
+      actions: isolateActionSource(source.actions, scope),
+      state: source.state.select(scope),
+      isolateSource,
+      isolateSink,
+    });
+
     return {
       actions: actionSource,
       state: stateSource,
+      isolateSource,
+      isolateSink,
     };
   };
 };
