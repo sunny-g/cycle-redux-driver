@@ -32,7 +32,7 @@ export interface StateSource {
 }
 
 export interface ReduxSource {
-  actions: ActionSource;
+  action: ActionSource;
   state: StateSource;
   isolateSource(source: ReduxSource, scope: string | null): ReduxSource;
   isolateSink(sink: ActionSink, scope: string | null): ActionSink;

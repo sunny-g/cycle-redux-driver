@@ -35,14 +35,14 @@ export default function makeReduxDriver (
 
     const isolateSink = isolateActionSink;
     const isolateSource = (source, scope) => ({
-      actions: isolateActionSource(source.actions, scope),
+      action: isolateActionSource(source.action, scope),
       state: source.state.select(scope),
       isolateSource,
       isolateSink,
     });
 
     return {
-      actions: actionSource,
+      action: actionSource,
       state: stateSource,
       isolateSource,
       isolateSink,
