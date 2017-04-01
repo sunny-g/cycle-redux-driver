@@ -29,7 +29,7 @@ export default class MainActionSource implements ActionSource {
     }
   }
 
-  public select(type, transform) {
+  public select(type) {
     let action$: ActionStream;
 
     if (type === undefined) {
@@ -43,7 +43,7 @@ export default class MainActionSource implements ActionSource {
         },
       );
     } else {
-      action$ = this.getOrCreateActionStream(type, transform);
+      action$ = this.getOrCreateActionStream(type);
     }
 
     return adapt(action$);

@@ -11,19 +11,28 @@ import {
   StateSource
 } from './interfaces';
 
-export default function makeReduxDriver (
-  reducer: Reducer<any>,
-  initialState: any,
-  actionsForStore: string[],
-  ...middlewares: Middleware[],
+export default function makeReduxDriver(
+  reducer: Reducer<any> = state => state,
+  initialState: any = null,
+  actionsForStore: string[] = [],
+  middlewares: Middleware[] = [],
 ): Driver<ActionSink, ReduxSource> {
-  return function reduxDriver(action$$: ActionSink): ReduxSource {
-    const store: Store<any> = createStore(
-      reducer,
-      initialState,
-      applyMiddleware(...(middlewares || [])),
-    );
 
+  const isolateSink = isolateActionSink;
+  const isolateSource = (source, scope) => ({
+    action: isolateActionSource(source.action, scope),
+    state: source.state.select(scope),
+    isolateSource,
+    isolateSink,
+  });
+
+  const store: Store<any> = createStore(
+    reducer,
+    initialState,
+    applyMiddleware(...(middlewares || [])),
+  );
+
+  return function reduxDriver(action$$: ActionSink): ReduxSource {
     const stateSource: StateSource = new MainStateSource(store);
     const actionSource: ActionSource = new MainActionSource(
       action$$,
@@ -32,14 +41,6 @@ export default function makeReduxDriver (
     );
 
     action$$.addListener({ next() {}, error() {}, complete() {} });
-
-    const isolateSink = isolateActionSink;
-    const isolateSource = (source, scope) => ({
-      action: isolateActionSource(source.action, scope),
-      state: source.state.select(scope),
-      isolateSource,
-      isolateSink,
-    });
 
     return {
       action: actionSource,

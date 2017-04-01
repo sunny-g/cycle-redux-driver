@@ -19,10 +19,7 @@ export interface ActionSinkCollection {
 export type ActionSink = Stream<ActionSinkCollection>;
 
 export interface ActionSource {
-  select(
-    type?: string,
-    transform?: (action$s: ActionSinkCollection) => ActionStream,
-  ): ActionStream | any;
+  select(type?: string): ActionStream | any;
   isolateSource(source: ActionSource, scope: string | null): ActionSource;
   isolateSink(sink: ActionSink, scope: string | null): ActionSink;
 }
