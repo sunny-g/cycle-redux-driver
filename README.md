@@ -143,11 +143,11 @@ run(main, {
 ### `makeReduxDriver`
 
 ##### parameters:
-* `reducer: Reducer<any>`: The same Redux reducer you'd pass into `createStore`
-* `initialState: any`: The same Redux initial state you'd pass into `createStore`
-* `actionsForStore: string[]`: List of action types that would result in a `store`'s state change
+* `reducer?: Reducer<any>`: The same Redux reducer you'd pass into `createStore`
+* `initialState?: any`: The same Redux initial state you'd pass into `createStore`
+* `actionsForStore?: string[]`: List of action types that would result in a `store`'s state change
   * is necessary for the driver to know which action streams (by type) should be subscribed to and funneled into the `store` on app load
-* `middlewares: Middleware[]`: The same Redux middlewares you'd pass into `createStore`
+* `middlewares?: Middleware[]`: The same Redux middlewares you'd pass into `createStore`
 
 Example:
 
@@ -166,14 +166,15 @@ run(main, {
 
 ### `redux.action` source
 
-#### `redux.action.select(type)`
+#### `redux.action.select(type?: string): ActionStream | ActionSink`
 
 ##### parameters:
-* `type: string`: A stream that emits action objects of the specified by `type`
+* `type?: string`: A stream that emits action objects of the specified by `type`
 
 ##### returns:
-* `Stream<FSA>`: A stream of [FSA-compliant](https://github.com/acdlite/flux-standard-action) action objects
-* **NOTE**: the `meta` property of the action object is an object with the key `'$$CYCLE_ACTION_SCOPE'` (for Cycle.js [isolation](https://cycle.js.org/components.html#components-isolating-multiple-instances))
+* `Stream<FSA> | Stream<{ [type: string]: Stream<FSA> }>`: A stream of [FSA-compliant](https://github.com/acdlite/flux-standard-action) action objects
+	* **NOTE**: the `meta` property of the action object is an object with the key `'$$CYCLE_ACTION_SCOPE'` - **this key is required** for Cycle.js [isolation](https://cycle.js.org/components.html#components-isolating-multiple-instances)
+	* if `type` was omitted, the stream returned is the raw `ActionSink` that was passed into the driver so that you can create your own custom action streams
 
 Example:
 
@@ -187,10 +188,10 @@ const incrementReducer$ = sources.REDUX.action
 
 ### `redux.state` source
 
-#### `redux.action.select(): Stream<any>`
+#### `redux.state.select(): StateStream<any>`
 
 ##### returns:
-* `Stream<any>`: A stream that emits the Redux store's current `state` every time the state has *changed*
+* `MemoryStream<any>`: A stream that emits the Redux store's current `state` every time the state has *changed*
 
 Example:
 
@@ -199,9 +200,9 @@ const state$ = sources.REDUX.state
   .select();
 ```
 
-### `redux` sink: `Stream<{ [type: string]: Stream<FSA> }>`
+### `redux` sink: `ActionSink`
 
-A stream of objects, where each key is a specific action `type` and each value is the stream that emits action objects of that `type`.
+`Stream<{ [type: string]: Stream<FSA> }>`: A stream of objects, where each key is a specific action `type` and each value is the stream that emits action objects of that `type`.
 
 Example:
 
@@ -231,11 +232,7 @@ return {
 
 - ensure typescript typings are correct and comprehensive
 - refactor implementation to not require `redux` if not using the state source
-- example app
-- usage docs
-	- show `select`ing certain actions
-- api docs
-- explain contribution
+- explain contribution process
 - add more tests :)
 - explain why I wrote this
 

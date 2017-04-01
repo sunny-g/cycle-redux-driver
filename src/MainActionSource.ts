@@ -30,23 +30,11 @@ export default class MainActionSource implements ActionSource {
   }
 
   public select(type) {
-    let action$: ActionStream;
-
     if (type === undefined) {
-      action$ = this.getOrCreateActionStream(
-        '*',
-        (action$s: ActionSinkCollection) => {
-          const actionStreams: Array<ActionStream> = Object
-            .keys(action$s)
-            .map(actionType => action$s[actionType]);
-          return xs.merge(...actionStreams);
-        },
-      );
-    } else {
-      action$ = this.getOrCreateActionStream(type);
+      return adapt(this.action$$);
     }
 
-    return adapt(action$);
+    return adapt(this.getOrCreateActionStream(type));
   }
 
   public isolateSource = isolateActionSource;
