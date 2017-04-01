@@ -5,9 +5,9 @@
   "author": "Sunny G",
   "license": "MIT",
   "dependencies": {
-    "@cycle/run": "^3.0.0",
-    "@cycle/dom": "^17.0.0",
-    "xstream": "10.x.x"
+    "@cycle/dom": "^17.1.0",
+    "@cycle/run": "^3.1.0",
+    "xstream": "^10.3.0"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",
