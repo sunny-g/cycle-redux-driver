@@ -1,11 +1,13 @@
 # cycle-redux-driver
-*(un)official Action and State driver for Redux*
+*(u)nofficial Redux Action and State driver for Cycle.js*
 
 
 <!--## why-->
 
 ## installation
-	npm install --save @sunny-g/cycle-redux-driver
+```
+npm install --save @sunny-g/cycle-redux-driver
+```
 
 
 ## usage
@@ -14,7 +16,7 @@ Basic usage with the Cycle.js [counter](https://github.com/cyclejs/cyclejs/tree/
 ```js
 import { combineReducers } from 'redux';
 import makeReduxDriver from '../../src/index.ts';
-// your standard Redux action types constants, action creators  and reducers
+// your standard Redux action type constants, action creators and reducers
 import countReducer, {
   initialCount,
   INCREMENT, DECREMENT,
@@ -202,7 +204,8 @@ const state$ = sources.REDUX.state
 
 ### `redux` sink: `ActionSink`
 
-`Stream<{ [type: string]: Stream<FSA> }>`: A stream of objects, where each key is a specific action `type` and each value is the stream that emits action objects of that `type`.
+##### should return:
+- `Stream<{ [type: string]: Stream<FSA> }>`: A stream of objects, where each key is a specific action `type` and each value is the stream that emits action objects of that `type`.
 
 Example:
 
@@ -210,28 +213,49 @@ Example:
 // INCREMENT, DECREMENT are action type constants
 // increment, decrement are action creators
 
-const action$ = of({
-  [DECREMENT] : sources.DOM
-    .select('.decrement')
-    .events('click')
-    .map(_ => decrement(1)),
-  [INCREMENT] : sources.DOM
-    .select('.increment')
-    .events('click')
-    .map(_ => increment(1)),
-});
-
 return {
-  REDUX: action$,
+  // ... other sinks...
+  REDUX: of({
+    [DECREMENT] : sources.DOM
+      .select('.decrement')
+      .events('click')
+      .map(_ => decrement(1)),
+    [INCREMENT] : sources.DOM
+      .select('.increment')
+      .events('click')
+      .map(_ => increment(1)),
+  }),
 };
 ```
+
+### helpers
+
+#### `createReducer(initialState: any, reducers: { [type: string]: Reducer })`
+Combines a set of related reducers into a single reducer
+
+##### parameters:
+* `initialState: any`: The initial state of a Redux "state machine"
+* `reducers: { [type: string]: Reducer }`: An object whose keys are the action `type`s and the values are  the `reducer`s that respond to those actions and whose signature is `(state: any, action: FSA) => any`
+
+##### returns:
+* a combined `reducer` of the same aformentioned signature
+
+#### `makeActionCreator(type: string)`
+Creates a shorthand function for creating action objects
+
+##### parameters:
+* `type: string`: The action `type` of the action object
+
+##### returns:
+* `actionCreator: (payload: any, error: bool = false, meta: object = {}) => FSA`: A function that creates [FSA-compliant](https://github.com/acdlite/flux-standard-action) action objects with the properties `type`, `payload`, `error`, and `meta`
 
 ## contributing
 
 #### todo
 
-- ensure typescript typings are correct and comprehensive
+- ensure typescript typings are correct and comprehensive and exported correctly
 - refactor implementation to not require `redux` if not using the state source
+- add testing mock action and state sources
 - explain contribution process
 - add more tests :)
 - explain why I wrote this

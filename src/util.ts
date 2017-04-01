@@ -13,7 +13,7 @@ export const createReducer = (initialState, reducers) =>
       ? reducers[action.type](state, action)
       : state;
 
-export const makeActionCreator = type =>
-  (payload, error = false, meta = {}) => ({
+export const makeActionCreator = (type: string) =>
+  (payload: any, error: boolean = false, meta: { [key: string]: any } = {}) => ({
     type, payload, error, meta,
   });
