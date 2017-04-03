@@ -1,6 +1,8 @@
 import { FSA } from 'flux-standard-action';
 import { Stream, MemoryStream } from 'xstream';
 
+export const ACTION_SCOPE_KEY = '$$CYCLE_ACTION_SCOPE';
+
 export type StateStream = MemoryStream<any>;
 
 export interface ActionMeta {

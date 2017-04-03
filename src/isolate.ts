@@ -1,8 +1,6 @@
 import { mapObj } from './util';
 import MainActionSource from "./MainActionSource";
-import { Action } from './interfaces';
-
-const ACTION_SCOPE_KEY = '$$CYCLE_ACTION_SCOPE';
+import { ACTION_SCOPE_KEY, Action } from './interfaces';
 
 export function isolateActionSource(actionSource, scope) {
   if (scope === null) { return actionSource; }
