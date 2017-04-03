@@ -25,7 +25,7 @@ export function isolateActionSink(actionSink, scope) {
 
   return actionSink
     .map(mapObj(action$ => action$
-      .map((action: Action) => {
+      .map((action: Action<any>) => {
         let meta = {};
 
         if (action.meta) {

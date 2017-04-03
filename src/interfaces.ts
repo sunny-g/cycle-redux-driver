@@ -4,22 +4,22 @@ import { Stream, MemoryStream } from 'xstream';
 export type StateStream = MemoryStream<any>;
 
 export interface ActionMeta {
-  $$CYCLE_ACTION_SCOPE: Set<string>;
+  $$CYCLE_ACTION_SCOPE: string[];
   [key: string]: any;
 }
 
-export type Action = FSA<any, ActionMeta>;
+export type Action<T> = FSA<T, ActionMeta>;
 
-export type ActionStream = Stream<Action>;
+export type ActionStream<T> = Stream<Action<T>>;
 
 export interface ActionSinkCollection {
-  [type: string]: ActionStream | any;
+  [type: string]: ActionStream<any> | any;
 }
 
 export type ActionSink = Stream<ActionSinkCollection>;
 
 export interface ActionSource {
-  select(type?: string): ActionStream | ActionSink | any;
+  select(type?: string): ActionStream<any> | ActionSink | any;
   isolateSource(source: ActionSource, scope: string | null): ActionSource;
   isolateSink(sink: ActionSink, scope: string | null): ActionSink;
 }

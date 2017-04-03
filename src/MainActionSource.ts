@@ -51,8 +51,8 @@ export default class MainActionSource implements ActionSource {
 
   private getOrCreateActionStream(
     type: string,
-    transform?: (action$s: ActionSinkCollection) => ActionStream,
-  ): ActionStream {
+    transform?: (action$s: ActionSinkCollection) => ActionStream<any>,
+  ): ActionStream<any> {
     // TODO: should this be compose, so that we can update the saved stream if necessary?
     if (!this._actionStreams.hasOwnProperty(type)) {
       this._actionStreams[type] = this.action$$
