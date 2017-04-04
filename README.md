@@ -1,7 +1,6 @@
 # cycle-redux-driver
 *(un)official Redux Action and State driver for Cycle.js*
 
-
 <!--## why-->
 
 ## installation
@@ -9,13 +8,12 @@
 npm install --save @sunny-g/cycle-redux-driver
 ```
 
-
 ## usage
 Basic usage with the Cycle.js [counter](https://github.com/cyclejs/cyclejs/tree/master/examples/counter) example:
 
 ```js
 import { combineReducers } from 'redux';
-import makeReduxDriver from '../../src/index.ts';
+import makeReduxDriver from '@sunny-g/cycle-redux-driver';
 // your standard Redux action type constants, action creators and reducers
 import countReducer, {
   initialCount,
