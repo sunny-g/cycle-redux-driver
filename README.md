@@ -1,5 +1,5 @@
 # cycle-redux-driver
-*(u)nofficial Redux Action and State driver for Cycle.js*
+*(un)official Redux Action and State driver for Cycle.js*
 
 
 <!--## why-->
