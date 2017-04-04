@@ -11,13 +11,20 @@ import {
   StateSource
 } from './interfaces';
 
-export default function makeReduxDriver(
-  reducer: Reducer<any> = state => state,
-  initialState: any = null,
-  actionsForStore: string[] = [],
-  middlewares: Middleware[] = [],
-): Driver<ActionSink, ReduxSource> {
+export interface MakeReduxDriver {
+  ( reducer: Reducer<any>,
+    initialState: any,
+    actionsForStore: string[],
+    middlewares: Middleware[],
+  ): Driver<ActionSink, ReduxSource>
+}
 
+const makeReduxDriver: MakeReduxDriver = function(
+  reducer = state => state,
+  initialState = null,
+  actionsForStore = [],
+  middlewares = [],
+) {
   const isolateSink = isolateActionSink;
   const isolateSource = (source, scope) => ({
     action: isolateActionSource(source.action, scope),
@@ -50,3 +57,5 @@ export default function makeReduxDriver(
     };
   };
 };
+
+export default makeReduxDriver;

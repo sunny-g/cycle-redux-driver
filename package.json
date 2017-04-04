@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "description": "Unofficial Cycle.js driver for Redux",
   "main": "index.js",
+  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "webpack",
     "build:watch": "npm run build -- --watch",
-    "prepublish": "npm run build",
+    "prepublish": "npm run build -- -p",
     "test": "jest --no-cache",
     "test:watch": "npm run test -- --watch"
   },
