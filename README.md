@@ -23,7 +23,7 @@ import countReducer, {
   increment, decrement,
 } from './redux.js';
 
-// typical Redux root reducer
+// your typical Redux root reducer
 const reducer = combineReducers({
   count: countReducer,
 });
@@ -85,8 +85,8 @@ function main(sources) {
   const incrementReducer$ = sources.REDUX.action
     .select(INCREMENT)
     .map(({ payload }) =>
-    ({ count }) =>
-      ({ count: count + payload })
+      ({ count }) =>
+        ({ count: count + payload })
     );
 
   const decrementReducer$ = sources.REDUX.action
@@ -97,13 +97,13 @@ function main(sources) {
     );
 
   // if using `onionify`, `stanga` or something similar,
-  // return reducer$ and map the `onion.state` source stream to `vdom$`
+  // return `reducer$` and map your provided state source stream to `vdom$`
   const reducer$ = incrementReducer$
     .merge(decrementReducer$);
 
   const props$ = reducer$
     .fold((state, reducer) =>
-    	reducer(state),
+      reducer(state),
     { count: initialCount });
 
   // same vdom$ as before
@@ -147,9 +147,12 @@ run(main, {
 ##### parameters:
 * `reducer?: Reducer<any>`: The same Redux reducer you'd pass into `createStore`
 * `initialState?: any`: The same Redux initial state you'd pass into `createStore`
-* `actionsForStore?: string[]`: List of action types that would result in a `store`'s state change
-  * is necessary for the driver to know which action streams (by type) should be subscribed to and funneled into the `store` on app load
+* `actionsForStore?: string[]`: List of action types that could result in a `store`'s state change
+  * every action stream is lazy by default (unless `select`ed within your application)
+  * therefore, in order to preserve as much laziness as possible, we use this array to inform the driver to (eagerly) subscribe to and funnel into the `store` only the action streams that contribute to Redux state
 * `middlewares?: Middleware[]`: The same Redux middlewares you'd pass into `createStore`
+
+**NOTE:** All parameters are optional in case you only want to use the action source.
 
 Example:
 
@@ -159,7 +162,6 @@ run(main, {
   REDUX: makeReduxDriver(
     reducer,
     { count: initialCount },
-    // specify which action types the driver should funnel into Redux store
     [ INCREMENT, DECREMENT ],
     [],
   ),
