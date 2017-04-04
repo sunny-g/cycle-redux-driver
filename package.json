@@ -1,6 +1,6 @@
 {
   "name": "@sunny-g/cycle-redux-driver",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Unofficial Cycle.js driver for Redux",
   "main": "index.js",
   "types": "dist/src/index.d.ts",
