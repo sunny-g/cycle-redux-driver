@@ -3,14 +3,20 @@
 import { createStore, combineReducers } from 'redux';
 import xs, { Stream } from 'xstream';
 import MainStateSource from '../src/MainStateSource';
-import { INCREMENT, increment } from './support';
+import countReducer, {
+  initialCount,
+  INCREMENT, increment,
+} from './support';
 
 describe('state source', () => {
 
   describe('`select` method', () => {
 
     test('should exist and be a function', () => {
-      const store = createStore();
+      const store = createStore(
+        countReducer,
+        initialCount,
+      );
 
       const stateSource = new MainStateSource(store);
 
@@ -18,17 +24,40 @@ describe('state source', () => {
       expect(stateSource.select).toBeInstanceOf(Function);
     });
 
-    test.skip('should return a stream of the Redux store\'s state', (done) => {});
+    test('should return a stream of the Redux store\'s state', (done) => {
+      const store = createStore(
+        countReducer,
+        initialCount,
+      );
 
-    test.skip('should return a stream of the Redux store\'s state without repeats', (done) => {});
+      const stateSource = new MainStateSource(store);
+
+      const stateHistory = [];
+      const state$ = stateSource
+        .select()
+        .take(3);
+
+      state$
+        .addListener({
+          next(state) {
+            stateHistory.push(state)
+          },
+          error() {},
+          complete() {
+            expect(stateHistory).toEqual([ 0, 1, 6 ]);
+            done();
+          },
+        });
+
+      store.dispatch(increment(1));
+      store.dispatch(increment(5));
+    });
 
   });
 
   describe('isolation', () => {
 
-    test.skip('should perform no isolation if scope is `null`', () => {});
-
-    test.skip('should isolate correctly if scope is a string', () => {});
+    test.skip('should perform no isolation', () => {});
 
   });
 
