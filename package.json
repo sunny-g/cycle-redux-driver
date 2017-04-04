@@ -1,9 +1,21 @@
 {
   "name": "@sunny-g/cycle-redux-driver",
-  "version": "0.1.0",
-  "description": "Unofficial Cycle.js driver for Redux",
+  "version": "0.1.1",
+  "description": "(u)nofficial Redux Action and State driver for Cycle.js",
+  "author": "Sunny G <sunny.gonna@gmail.com> (http://blog.sunnyg.io)",
+  "homepage": "https://github.com/sunny-g/cycle-redux-driver",
+  "repository": "https://github.com/sunny-g/cycle-redux-driver",
+  "bugs": "https://github.com/sunny-g/cycle-redux-driver/issues",
+  "license": "ISC",
   "main": "index.js",
   "types": "dist/src/index.d.ts",
+  "keywords": [
+    "cycle",
+    "redux",
+    "rxjs",
+    "mostjs",
+    "xstream"
+  ],
   "scripts": {
     "build": "webpack",
     "build:watch": "npm run build -- --watch",
@@ -34,14 +46,6 @@
       "\\.(ts|js)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     }
   },
-  "keywords": [
-    "cycle",
-    "redux",
-    "rx",
-    "rxjs"
-  ],
-  "author": "Sunny G <sunny.gonna@gmail.com> (http://blog.sunnyg.io)",
-  "license": "ISC",
   "dependencies": {
     "@cycle/run": "*",
     "flux-standard-action": "^1.2.0",
@@ -60,5 +64,8 @@
     "ts-loader": "^2.0.1",
     "typescript": "^2.2.1",
     "webpack": "^2.3.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
