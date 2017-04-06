@@ -7,8 +7,12 @@
   "repository": "https://github.com/sunny-g/cycle-redux-driver",
   "bugs": "https://github.com/sunny-g/cycle-redux-driver/issues",
   "license": "ISC",
-  "main": "index.js",
+  "main": "dist/index.js",
   "types": "dist/src/index.d.ts",
+  "files": [
+    "dist",
+    "src/"
+  ],
   "keywords": [
     "cycle",
     "redux",
@@ -19,7 +23,7 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "npm run build -- --watch",
-    "prepublish": "npm run build -- -p",
+    "prepublish": "npm run build",
     "test": "jest --no-cache",
     "test:watch": "npm run test -- --watch"
   },
