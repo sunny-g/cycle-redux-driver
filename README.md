@@ -254,6 +254,7 @@ Creates a shorthand function for creating action objects
 #### todo
 
 - ensure typescript typings are correct and comprehensive and exported correctly
+- ensure build tooling with `tsc` and `webpack` is correct
 - refactor implementation to not require `redux` if not using the state source
 - add testing mock action and state sources
 - explain contribution process
