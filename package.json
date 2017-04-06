@@ -1,14 +1,15 @@
 {
   "name": "@sunny-g/cycle-redux-driver",
-  "version": "0.1.2",
+  "version": "0.1.5-beta.4",
   "description": "(u)nofficial Redux Action and State driver for Cycle.js",
   "author": "Sunny G <sunny.gonna@gmail.com> (http://blog.sunnyg.io)",
   "homepage": "https://github.com/sunny-g/cycle-redux-driver",
   "repository": "https://github.com/sunny-g/cycle-redux-driver",
   "bugs": "https://github.com/sunny-g/cycle-redux-driver/issues",
   "license": "ISC",
-  "main": "dist/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/cycle-redux-driver.js",
+  "module": "dist/es2015/index.js",
+  "types": "dist/es2015/index.d.ts",
   "files": [
     "dist",
     "src/"
@@ -23,7 +24,7 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "npm run build -- --watch",
-    "prepublish": "npm run build",
+    "prepublish": "tsc && npm run build",
     "test": "jest --no-cache",
     "test:watch": "npm run test -- --watch"
   },

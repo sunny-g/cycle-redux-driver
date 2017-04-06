@@ -2,6 +2,7 @@ const path = require('path');
 const SRC_DIR = path.resolve(__dirname, 'src');
 const DIST_DIR = path.resolve(__dirname, 'dist');
 const EXAMPLE_DIR = path.resolve(__dirname, 'example');
+const libraryName = 'CycleReduxDriver';
 
 const babelLoader = {
   loader: 'babel-loader',
@@ -14,6 +15,14 @@ const babelLoader = {
 };
 const tsLoader = {
   loader: 'ts-loader',
+  options: {
+    compilerOptions: {
+      declaration: false,
+      moduleResolution: 'node',
+      module: 'commonjs',
+      target: 'es5',
+    },
+  },
 };
 
 module.exports = {
@@ -22,11 +31,16 @@ module.exports = {
     port: 8080,
   },
 
-  entry: './src/index.ts',
+  entry: {
+    'cycle-redux-driver': './src/index.ts',
+  },
 
   output: {
     path: DIST_DIR,
-    filename: 'index.js',
+    filename: '[name].js',
+    library: libraryName,
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
   },
 
   resolve: {
@@ -38,6 +52,7 @@ module.exports = {
     rules: [{
       test: /\.ts/,
       include: SRC_DIR,
+      exclude: /node_modules/,
       use: [
         babelLoader,
         tsLoader,
@@ -45,6 +60,7 @@ module.exports = {
     }, {
       test: /\.js/,
       include: SRC_DIR,
+      exclude: /node_modules/,
       use: [
         babelLoader,
       ],
