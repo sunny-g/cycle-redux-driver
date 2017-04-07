@@ -1,6 +1,6 @@
 import { adapt } from '@cycle/run/lib/adapt';
 import { Store } from 'redux';
-import { Stream, fromObservable } from 'xstream';
+import xs, { Stream } from 'xstream';
 import { isolateActionSource, isolateActionSink } from './isolate';
 import {
   ActionSinkCollection,
@@ -55,7 +55,7 @@ export default class MainActionSource implements ActionSource {
         .map(action$s => {
           let stream = action$s[type];
           if (!(stream instanceof Stream)) {
-            stream = fromObservable(stream);
+            stream = xs.from(stream);
           }
           return stream;
         })
