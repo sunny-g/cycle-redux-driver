@@ -1,7 +1,6 @@
 import { adapt } from '@cycle/run/lib/adapt';
 import { Store } from 'redux';
-import xs from 'xstream';
-import dropRepeats from 'xstream/extra/dropRepeats';
+import { Stream, fromObservable } from 'xstream';
 import { isolateActionSource, isolateActionSink } from './isolate';
 import {
   ActionSinkCollection,
@@ -49,17 +48,17 @@ export default class MainActionSource implements ActionSource {
     });
   }
 
-  private getOrCreateActionStream(
-    type: string,
-    transform?: (action$s: ActionSinkCollection) => ActionStream<any>,
-  ): ActionStream<any> {
+  private getOrCreateActionStream(type: string): ActionStream<any> {
     // TODO: should this be compose, so that we can update the saved stream if necessary?
     if (!this._actionStreams.hasOwnProperty(type)) {
       this._actionStreams[type] = this.action$$
-        .map((typeof transform === 'function') ?
-          transform :
-          action$s => action$s[type]
-        )
+        .map(action$s => {
+          let stream = action$s[type];
+          if (!(stream instanceof Stream)) {
+            stream = fromObservable(stream);
+          }
+          return stream;
+        })
         .flatten();
     }
 

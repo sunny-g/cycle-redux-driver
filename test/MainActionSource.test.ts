@@ -37,8 +37,6 @@ describe('action source', () => {
           error() {},
           complete() {},
         });
-
-      run();
     });
 
     test('should return a stream of only action of type `type` when given a `type`', (done) => {
@@ -61,8 +59,6 @@ describe('action source', () => {
           error() {},
           complete() {},
         });
-
-      run();
     });
 
   });
