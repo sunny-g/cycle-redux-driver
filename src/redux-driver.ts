@@ -1,5 +1,5 @@
 import { Driver } from '@cycle/run';
-import { applyMiddleware, createStore } from 'redux';
+import { createStore, StoreEnhancer } from 'redux';
 import { Middleware, Reducer, Store } from 'redux';
 import MainActionSource from './MainActionSource';
 import MainStateSource from './MainStateSource';
@@ -15,7 +15,7 @@ export interface MakeReduxDriver {
   ( reducer: Reducer<any>,
     initialState: any,
     actionsForStore: string[],
-    middlewares: Middleware[],
+    storeEnhancer: StoreEnhancer<any>,
   ): Driver<ActionSink, ReduxSource>
 }
 
@@ -23,7 +23,7 @@ const makeReduxDriver: MakeReduxDriver = function(
   reducer = state => state,
   initialState = null,
   actionsForStore = [],
-  middlewares = [],
+  storeEnhancer = x => x,
 ) {
   const isolateSink = isolateActionSink;
   const isolateSource = (source, scope) => ({
@@ -36,7 +36,7 @@ const makeReduxDriver: MakeReduxDriver = function(
   const store: Store<any> = createStore(
     reducer,
     initialState,
-    applyMiddleware(...(middlewares || [])),
+    storeEnhancer,
   );
 
   return function reduxDriver(action$$: ActionSink): ReduxSource {

@@ -1,6 +1,6 @@
 {
   "name": "@sunny-g/cycle-redux-driver",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "(u)nofficial Redux Action and State driver for Cycle.js",
   "author": "Sunny G <sunny.gonna@gmail.com> (http://blog.sunnyg.io)",
   "homepage": "https://github.com/sunny-g/cycle-redux-driver",
@@ -55,7 +55,7 @@
     "@cycle/run": "*",
     "flux-standard-action": "^1.2.0",
     "redux": "^3.6.0",
-    "xstream": "^10.3.0"
+    "xstream": "^10.4.0"
   },
   "devDependencies": {
     "@types/jest": "^19.2.2",

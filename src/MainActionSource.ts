@@ -53,9 +53,9 @@ export default class MainActionSource implements ActionSource {
     if (!this._actionStreams.hasOwnProperty(type)) {
       this._actionStreams[type] = this.action$$
         .map(action$s => {
-          let stream = action$s[type];
+          const stream = action$s[type];
           if (!(stream instanceof Stream)) {
-            stream = xs.from(stream);
+            return xs.from(stream);
           }
           return stream;
         })
