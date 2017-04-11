@@ -31,6 +31,7 @@ const makeReduxDriver: MakeReduxDriver = function(
     state: source.state.select(scope),
     isolateSource,
     isolateSink,
+    scope,
   });
 
   const store: Store<any> = createStore(
@@ -54,6 +55,7 @@ const makeReduxDriver: MakeReduxDriver = function(
       state: stateSource,
       isolateSource,
       isolateSink,
+      scope: 'CYCLE_REDUX_DRIVER',
     };
   };
 };

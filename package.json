@@ -1,6 +1,6 @@
 {
   "name": "@sunny-g/cycle-redux-driver",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "(u)nofficial Redux Action and State driver for Cycle.js",
   "author": "Sunny G <sunny.gonna@gmail.com> (http://blog.sunnyg.io)",
   "homepage": "https://github.com/sunny-g/cycle-redux-driver",

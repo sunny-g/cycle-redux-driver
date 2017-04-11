@@ -254,6 +254,7 @@ Creates a shorthand function for creating action objects
 #### todo
 
 - ensure typescript typings are correct and comprehensive and exported correctly
+- evaluate whether or not optimizations can be made to reduce the number fo emissions of actions of a particular type
 - enhance use without `store`:
   - no store in dev (subscribes to all action$s)
   - no store in prod (doesn't use redux, only circulates actions)

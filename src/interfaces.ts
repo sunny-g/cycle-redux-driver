@@ -31,6 +31,7 @@ export interface StateSource {
 }
 
 export interface ReduxSource {
+  scope: string | null;
   action: ActionSource;
   state: StateSource;
   isolateSource(source: ReduxSource, scope: string | null): ReduxSource;

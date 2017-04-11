@@ -10,40 +10,30 @@ export function isolateActionSource(actionSource, scope) {
     action.meta.hasOwnProperty(ACTION_SCOPE_KEY) &&
     Array.isArray(action.meta[ACTION_SCOPE_KEY]) &&
     action.meta[ACTION_SCOPE_KEY].includes(scope);
+  const filterer = mapObj(action$ => action$.filter(predicate));
 
-  const newSource = new MainActionSource(actionSource.action$$);
-  const originalSelect = newSource.select.bind(newSource);
-  newSource.select = (...args) => {
-    if (args.length === 0) {
-      return originalSelect()
-        .map(mapObj(action$ => action$.filter(predicate)));
-    }
-
-    return originalSelect(...args).filter(predicate);
-  };
-
-  return newSource;
+  return new MainActionSource(actionSource.action$$.map(filterer));
 }
 
 export function isolateActionSink(actionSink, scope) {
   if (scope === null) { return actionSink; }
 
-  return actionSink
-    .map(mapObj(action$ => action$
-      .map((action: Action<any>) => {
-        let meta = {};
+  const addScopeToActions = mapObj(action$ => action$
+    .map((action: Action<any>) => {
+      let meta = {};
 
-        if (action.meta) {
-          meta = { ...action.meta };
-        }
+      if (action.meta) {
+        meta = { ...action.meta };
+      }
 
-        if (!action.meta.hasOwnProperty(ACTION_SCOPE_KEY) || !Array.isArray(action.meta[ACTION_SCOPE_KEY])) {
-          meta[ACTION_SCOPE_KEY] = [];
-        }
+      if (!action.meta.hasOwnProperty(ACTION_SCOPE_KEY) || !Array.isArray(action.meta[ACTION_SCOPE_KEY])) {
+        meta[ACTION_SCOPE_KEY] = [];
+      }
 
-        meta[ACTION_SCOPE_KEY].push(scope);
+      meta[ACTION_SCOPE_KEY].push(scope);
 
-        return { ...action, meta };
-      })
-    ));
+      return { ...action, meta };
+    }))
+
+  return actionSink.map(addScopeToActions);
 }

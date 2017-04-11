@@ -9,6 +9,8 @@ import {
   ActionStream,
 } from './interfaces';
 
+const NOOP = () => {};
+
 export default class MainActionSource implements ActionSource {
   public action$$: ActionSink;
   private _actionStreams: ActionSinkCollection = {};
@@ -44,7 +46,7 @@ export default class MainActionSource implements ActionSource {
       this
         .getOrCreateActionStream(type)
         .debug(action => store.dispatch(action))
-        .addListener({ next() {}, error() {}, complete() {} });
+        .addListener({ next: NOOP, error: NOOP, complete: NOOP });
     });
   }
 
@@ -52,6 +54,7 @@ export default class MainActionSource implements ActionSource {
     // TODO: should this be compose, so that we can update the saved stream if necessary?
     if (!this._actionStreams.hasOwnProperty(type)) {
       this._actionStreams[type] = this.action$$
+        .filter(action$s => action$s.hasOwnProperty(type))
         .map(action$s => {
           const stream = action$s[type];
           if (!(stream instanceof Stream)) {
