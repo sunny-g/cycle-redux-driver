@@ -14,6 +14,6 @@ export const createReducer = (initialState, reducers) =>
       : state;
 
 export const makeActionCreator = (type: string) =>
-  (payload: any, error: boolean = false, meta: { [key: string]: any } = {}) => ({
+  (payload: any, error: boolean = false, meta: {} = {}) => ({
     type, payload, error, meta,
   });

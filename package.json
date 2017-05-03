@@ -1,6 +1,6 @@
 {
   "name": "@sunny-g/cycle-redux-driver",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "(un)official Redux Action and State driver for Cycle.js",
   "author": "Sunny G <sunny.gonna@gmail.com> (http://blog.sunnyg.io)",
   "homepage": "https://github.com/sunny-g/cycle-redux-driver",
@@ -24,7 +24,7 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "npm run build -- --watch",
-    "prepublish": "tsc && npm run build",
+    "prepublish": "npm test && tsc && npm run build",
     "test": "jest --no-cache",
     "test:watch": "npm run test -- --watch"
   },
