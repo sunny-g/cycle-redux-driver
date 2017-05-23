@@ -3,5 +3,6 @@ node_modules/
 *.sublime*
 *.log
 .idea/
-dist/
+commonjs/
 coverage/
+es2015/
