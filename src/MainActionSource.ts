@@ -1,7 +1,7 @@
 import { adapt } from '@cycle/run/lib/adapt';
 import { Store } from 'redux';
 import xs, { Stream } from 'xstream';
-import { isolateActionSource, isolateActionSink } from './isolate';
+import { inScope, isolateActionSource, isolateActionSink } from './isolate';
 import {
   ActionSinkCollection,
   ActionSink,
@@ -38,6 +38,7 @@ export default class MainActionSource implements ActionSource {
     return adapt(this.getOrCreateActionStream(type));
   }
 
+  public inScope = inScope;
   public isolateSource = isolateActionSource;
   public isolateSink = isolateActionSink;
 

@@ -2,6 +2,13 @@ import { mapObj } from './util';
 import MainActionSource from "./MainActionSource";
 import { ACTION_SCOPE_KEY, Action } from './interfaces';
 
+export function inScope({ meta }, scope) {
+  if (meta[ACTION_SCOPE_KEY] === undefined) { return false; }
+
+  return Array.isArray(meta[ACTION_SCOPE_KEY])
+    && meta[ACTION_SCOPE_KEY].indexOf(scope) !== -1;
+}
+
 export function isolateActionSource(actionSource, scope) {
   if (scope === null) { return actionSource; }
 
