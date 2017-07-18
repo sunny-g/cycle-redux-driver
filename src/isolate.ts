@@ -2,7 +2,7 @@ import { mapObj } from './util';
 import MainActionSource from "./MainActionSource";
 import { ACTION_SCOPE_KEY, Action } from './interfaces';
 
-export function inScope({ meta }, scope) {
+export const inScope = scope => ({ meta }) => {
   if (meta[ACTION_SCOPE_KEY] === undefined) { return false; }
 
   return Array.isArray(meta[ACTION_SCOPE_KEY])
