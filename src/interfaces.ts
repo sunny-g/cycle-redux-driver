@@ -22,6 +22,7 @@ export type ActionSink = Stream<ActionSinkCollection>;
 
 export interface ActionSource {
   select(type?: string): ActionStream<any> | ActionSink | any;
+  inScope(action: Action<any>, scope: string): boolean;
   isolateSource(source: ActionSource, scope: string | null): ActionSource;
   isolateSink(sink: ActionSink, scope: string | null): ActionSink;
 }
