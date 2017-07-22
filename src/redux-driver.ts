@@ -28,7 +28,7 @@ const makeReduxDriver: MakeReduxDriver = function(
   const isolateSink = isolateActionSink;
   const isolateSource = (source, scope) => ({
     action: isolateActionSource(source.action, scope),
-    state: source.state.select(scope),
+    state: source.state,
     isolateSource,
     isolateSink,
     scope,
